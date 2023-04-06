@@ -39,8 +39,7 @@
             </div>
           </div>
           <div v-else>
-            <div v-html="row.note"
-              class="prose dark:prose-invert m-5 rounded bg-white">
+            <div v-html="row.note" class="prose dark:prose-invert m-5 rounded bg-white">
             </div>
             <div class="flex justify-end mt-2">
               <button @click="editNote(index)"
@@ -61,8 +60,10 @@
 
 <script>
 import { ref } from 'vue';
+import { useRoute } from 'vue-router';
 import EmGithubEmbed from '@/components/EmGithubEmbed.vue';
 import TipTapEditor from '@/components/TipTapEditor.vue';
+import DocumentModel from '@/models/DocumentModel';
 
 export default {
   name: 'DocumentPage',
@@ -72,6 +73,8 @@ export default {
   },
   setup() {
     const rows = ref([]);
+    const route = useRoute();
+    const documentId = route.params.id;
 
     const addRow = () => {
       rows.value.push({
@@ -80,34 +83,36 @@ export default {
         note: '',
         editingNote: false,
       });
-      saveRows();
+      saveRows(documentId);
     };
 
     const submitLink = (index) => {
       rows.value[index].target = rows.value[index].targetInput;
       rows.value[index].editing
       rows.value[index].editingLink = false;
-      saveRows();
+      saveRows(documentId);
     };
 
     const editLink = (index) => {
       rows.value[index].editingLink = true;
-      saveRows();
+      saveRows(documentId);
     };
 
     const deleteRow = (index) => {
       rows.value.splice(index, 1);
-      saveRows();
+      saveRows(documentId);
     };
 
-    const saveRows = () => {
-      localStorage.setItem("document", JSON.stringify(rows.value));
+    const saveRows = async (docId) => {
+      const document = await DocumentModel.getById(docId);
+      document.content = rows.value;
+      await document.save();
     };
 
-    const loadRows = () => {
-      const storedRows = localStorage.getItem('document');
-      if (storedRows) {
-        rows.value = JSON.parse(storedRows);
+    const loadRows = async (docId) => {
+      const document = await DocumentModel.getById(docId);
+      if (document && document.content) {
+        rows.value = JSON.parse(document.content);
       }
     };
 
@@ -130,14 +135,14 @@ export default {
 
     const saveNote = (index) => {
       rows.value[index].editingNote = false;
-      saveRows();
+      saveRows(documentId);
     };
 
     const cancelNote = (index) => {
       rows.value[index].editingNote = false;
     };
 
-    loadRows();
+    loadRows(documentId);
 
     return {
       rows,
