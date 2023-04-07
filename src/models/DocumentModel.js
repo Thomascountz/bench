@@ -1,7 +1,7 @@
 import localforage from 'localforage';
 
 class DocumentModel {
-    constructor(id, name, content = []) {
+    constructor(id, name, content = '[]') {
         this.id = id;
         this.name = name;
         this.content = content;
@@ -26,14 +26,15 @@ class DocumentModel {
     }
 
     static async save(document) {
-        await localforage.setItem(`doc-${document.id}`, document);
-        const documents = await localforage.getItem('documents');
+        let documents = await localforage.getItem('documents');
         if (!documents) {
-            await localforage.setItem('documents', [document.id]);
-            return;
+            documents = await localforage.setItem('documents', []);
         }
-        documents.push(document.id);
-        await localforage.setItem('documents', documents);
+        if (!documents.includes(document.id)) {
+            documents.push(document.id);
+            await localforage.setItem('documents', documents);
+        }
+        await localforage.setItem(`doc-${document.id}`, document);
     }
 
     static async update(document) {

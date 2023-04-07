@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto my-8">
     <div class="flex justify-between items-center mb-8">
-      <h1 class="text-3xl font-semibold text-gray-800">Document</h1>
+      <h1 class="text-3xl font-semibold text-gray-800">{{ documentName }}</h1>
       <button @click="addRow" class="bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded">
         Add row
       </button>
@@ -75,6 +75,8 @@ export default {
     const rows = ref([]);
     const route = useRoute();
     const documentId = route.params.id;
+    const documentName = ref('');
+
 
     const addRow = () => {
       rows.value.push({
@@ -105,8 +107,8 @@ export default {
 
     const saveRows = async (docId) => {
       const document = await DocumentModel.getById(docId);
-      document.content = rows.value;
-      await document.save();
+      document.content = JSON.stringify(rows.value);
+      await DocumentModel.save(document);
     };
 
     const loadRows = async (docId) => {
@@ -114,6 +116,11 @@ export default {
       if (document && document.content) {
         rows.value = JSON.parse(document.content);
       }
+    };
+
+    const loadDocumentName = async (docId) => {
+      const document = await DocumentModel.getById(docId);
+      documentName.value = document.name;
     };
 
     const confirmDelete = (index) => {
@@ -143,6 +150,7 @@ export default {
     };
 
     loadRows(documentId);
+    loadDocumentName(documentId)
 
     return {
       rows,
@@ -154,6 +162,7 @@ export default {
       editNote,
       saveNote,
       cancelNote,
+      documentName
     };
   },
 };

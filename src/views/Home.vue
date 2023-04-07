@@ -41,7 +41,7 @@ export default {
         const documents = ref([]);
         const addDocument = async () => {
             const newId = `${Date.now()}-${Math.random().toString(36)}`;
-            const newDocument = new DocumentModel(newId, `Document ${documents.value.length + 1}`);
+            const newDocument = new DocumentModel(newId, 'New Document');
             await DocumentModel.save(newDocument)
             await loadDocuments();
         };
