@@ -40,7 +40,7 @@
               </div>
             </div>
             <div v-else>
-              <div v-html="element.note" class="prose dark:prose-invert m-5 rounded bg-white border-1">
+              <div v-html="element.note" class="prose m-5 rounded bg-white border-1">
               </div>
               <div class="flex justify-end mt-2">
                 <button @click="editNote(index)"
