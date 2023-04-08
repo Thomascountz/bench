@@ -34,6 +34,10 @@ export default {
             type: String,
             default: 'on',
         },
+        fetchFromJsDelivr: {
+            type: String,
+            default: 'on',
+        },
     },
     mounted() {
         this.createScript();
@@ -43,7 +47,7 @@ export default {
             const script = document.createElement('script');
             script.src = `https://emgithub.com/embed-v2.js?target=${encodeURIComponent(
                 this.target
-            )}&style=${this.style}&type=${this.type}&showBorder=${this.showBorder}&showLineNumbers=${this.showLineNumbers}&showFileMeta=${this.showFileMeta}&showFullPath=${this.showFullPath}&showCopy=${this.showCopy}`;
+            )}&style=${this.style}&type=${this.type}&showBorder=${this.showBorder}&showLineNumbers=${this.showLineNumbers}&showFileMeta=${this.showFileMeta}&showFullPath=${this.showFullPath}&showCopy=${this.showCopy}&fetchFromJsDelivr=${this.fetchFromJsDelivr}}`;
             this.$refs.container.appendChild(script);
         },
     },
