@@ -1,35 +1,33 @@
 <template>
     <div class="container mx-auto my-8 px-4">
-        <h1 class="text-3xl font-semibold mb-4 text-gray-800">Documents</h1>
-        <div class="grid grid-cols-3 gap-4">
-            <div v-if="documents.length > 0">
-                <div v-for="(doc, index) in documents" :key="doc.id">
-                    <div class="border border-gray-300 p-4 rounded bg-white">
-                        <router-link :to="{ name: 'Document', params: { id: doc.id } }"
-                            class="text-gray-800 hover:text-gray-600">
-                            {{ doc.name }}
-                        </router-link>
-                        <div class="flex justify-end mt-2">
-                            <button @click="startRename(index)"
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-medium py-1 px-2 rounded mr-2">
-                                Rename
-                            </button>
-                            <button @click="confirmDelete(index)"
-                                class="bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded">
-                                Delete
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="border border-gray-300 p-4 rounded bg-white">
-                <button @click="addDocument" class="bg-gray-800 hover:bg-gray-700 text-white font-medium py-1 px-2 rounded">
-                    New Document
-                </button>
-            </div>
+      <div class="flex justify-between items-center mb-6 mt-6">
+        <h1 class="text-3xl font-semibold text-neutral-900">Documents</h1>
+        <button @click="addDocument()"
+          class="bg-slate-300 border border-black hover:bg-slate-400 text-black font-medium py-1 px-2 rounded mr-2">
+          + New Document
+        </button>
+      </div>
+      <div class="border border-black rounded-lg">
+        <div v-for="(doc, index) in documents" :key="index"
+          class="border-b border-black py-4 px-4 flex items-center justify-between last:rounded-b-none last:border-b-0">
+          <router-link :to="'/document/' + doc.id"
+            class="text-xl font-medium text-black hover:text-green-900 hover:underline">
+            {{ doc.name }}
+          </router-link>
+          <div>
+            <button @click="startRename(index)"
+              class="bg-slate-300 border border-black hover:bg-slate-400 text-black font-medium py-1 px-2 rounded mr-2">
+              Rename
+            </button>
+            <button @click="deleteDocument(index)"
+              class="bg-slate-300 hover:bg-red-900 text-red-900 hover:text-white border border-red-900 font-medium py-1 px-2 rounded">
+              Delete
+            </button>
+          </div>
         </div>
+      </div>
     </div>
-</template>
+  </template>
   
 <script>
 import { ref } from 'vue';

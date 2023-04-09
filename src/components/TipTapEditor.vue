@@ -1,6 +1,6 @@
 <template>
-    <div class="tiptap-editor">
-        <div class="menu-bar bg-white shadow-md py-2 px-4 space-x-2">
+    <div class="tiptap-editor mt-5">
+        <div class="menu-bar bg-gray-200 py-2 px-4 space-x-4 rounded-t border border-t-black border-r-black border-l-black">
             <button @click="editor.chain().focus().toggleHeading({ level: 3 }).run()">
                 <font-awesome-icon :icon="['fas', 'heading']" />
             </button>
@@ -20,7 +20,7 @@
                 <font-awesome-icon :icon="['fas', 'list-ol']" />
             </button>
         </div>
-        <editor-content :editor="editor" class="border border-gray-300 p-4 mt-2 rounded bg-white" />
+        <editor-content :editor="editor" class="border border-b-black border-l-black border-r-black p-1 rounded-b bg-white" />
     </div>
 </template>
   
@@ -65,7 +65,7 @@ export default {
             extensions: [StarterKit, Link],
             editorProps: {
                 attributes: {
-                    class: 'prose dark:prose-invert m-5 focus:outline-none',
+                    class: 'prose max-w-full m-5 focus:outline-none',
                 },
             },
             content: this.modelValue,

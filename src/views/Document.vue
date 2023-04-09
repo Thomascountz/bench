@@ -1,54 +1,56 @@
 <template>
-  <div class="container mx-auto my-8">
-    <router-link to="/" class="bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded">
-      Home
+  <div class="container mx-auto my-8 px-4">
+    <router-link to="/"
+      class="text-black font-medium mr-2 p-2">
+      ← Home
     </router-link>
-    <div class="flex justify-between items-center mb-8 mt-8">
-      <h1 class="text-3xl font-semibold text-gray-800">{{ documentName }}</h1>
+    <div class="flex justify-between items-center mb-6 mt-6">
+      <h1 class="text-3xl font-semibold text-neutral-900">{{ documentName }}</h1>
     </div>
     <draggable v-model="rows" item-key="id" @end="saveRows(documentId)">
       <template #item="{ element, index }">
-        <div class="grid grid-cols-2 gap-8 mb-8">
-          <div>
+        <div class="grid grid-cols-2 gap-6 mb-6 border border-black rounded-lg">
+          <div class="p-4 border-r border-black">
             <div v-if="element.editingLink">
-              <input v-model="element.targetInput" class="border border-gray-300 p-2 w-full rounded" placeholder="Github link"/>
+              <input v-model="element.targetInput" class="border border-black mt-5 p-2 w-full rounded"
+                placeholder="Github link" />
               <button @click="submitLink(index)"
-                class="bg-gray-800 hover:bg-gray-700 text-white font-medium py-1 px-2 rounded mt-2">
+                class="bg-green-800 hover:bg-green-900 text-white font-medium py-1 px-2 rounded mt-2 border border-black">
                 Submit
               </button>
             </div>
             <div v-else>
               <em-github-embed :target="element.target" />
               <button @click="editLink(index)"
-                class="bg-gray-800 hover:bg-gray-700 text-white font-medium py-1 px-2 rounded mt-2">
+                class="bg-slate-300 border border-black hover:bg-slate-400 text-black font-medium py-1 px-2 rounded mr-2">
                 Edit
               </button>
             </div>
           </div>
-          <div>
+          <div class="p-4">
             <div v-if="element.editingNote">
               <tip-tap-editor v-model="element.note" />
               <div class="flex justify-end mt-2">
                 <button @click="saveNote(index)"
-                  class="bg-green-500 hover:bg-green-700 text-white font-medium py-1 px-2 rounded mr-2">
+                  class="bg-green-800 hover:bg-green-900 text-white font-medium py-1 px-2 rounded mr-2 border border-black mt-2">
                   Save
                 </button>
                 <button @click="cancelNote(index)"
-                  class="bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded">
+                  class="bg-slate-300 hover:bg-red-900 text-red-900 hover:text-white border border-red-900 font-medium py-1 px-2 rounded mt-2">
                   Cancel
                 </button>
               </div>
             </div>
             <div v-else>
-              <div v-html="element.note" class="prose m-5 rounded bg-white border-1">
+              <div v-html="element.note" class="prose max-w-full mt-5 p-4 rounded border border-black">
               </div>
               <div class="flex justify-end mt-2">
                 <button @click="editNote(index)"
-                  class="bg-gray-800 hover:bg-gray-700 text-white font-medium py-1 px-2 rounded mr-2">
+                  class="bg-slate-300 border border-black hover:bg-slate-400 text-black font-medium py-1 px-2 rounded mr-2 mt-2">
                   Edit
                 </button>
                 <button @click="confirmDelete(index)"
-                  class="bg-red-500 hover:bg-red-700 text-white font-medium py-1 px-2 rounded">
+                  class="bg-slate-300 hover:bg-red-900 text-red-900 hover:text-white border border-red-900 font-medium py-1 px-2 rounded mt-2">
                   Delete
                 </button>
               </div>
@@ -57,7 +59,8 @@
         </div>
       </template>
       <template #footer>
-        <button @click="addRow" class="bg-gray-800 hover:bg-gray-700 text-white font-medium py-2 px-4 rounded">
+        <button @click="addRow"
+          class="bg-slate-300 border border-black hover:bg-slate-400 text-black font-medium py-1 px-2 rounded mr-2">
           + Add row
         </button>
       </template>
