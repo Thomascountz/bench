@@ -112,15 +112,15 @@ export default {
     const rows = ref([]);
     const route = useRoute();
     const documentId = route.params.id;
-    const previousLink = ref('');
-    const previousNote = ref('');
     const documentName = ref('');
 
     const addRow = () => {
       const id = Math.max(...rows.value.map((row) => row.id), 0) + 1;
       const newRow = new RowModel(id, '', '');
       newRow.editingLink = true;
+      newRow.previousLink = '';
       newRow.editingNote = true;
+      newRow.previousNote = '';
       newRow.targetInput = '';
       rows.value.push(newRow);
       saveRows(documentId);
@@ -133,16 +133,16 @@ export default {
     };
 
     const editLink = (index) => {
-      previousLink.value = rows.value[index].target;
+      rows.value[index].previousLink = rows.value[index].target;
       rows.value[index].editingLink = true;
       saveRows(documentId);
     };
 
     const cancelLink = (index) => {
       rows.value[index].editingLink = false;
-      rows.value[index].target = previousLink.value;
+      rows.value[index].target = rows.value[index].previousLink;
       saveRows(documentId);
-      previousLink.value = '';
+      rows.value[index].previousLink = '';
     };
 
     const deleteRow = (index) => {
@@ -180,7 +180,7 @@ export default {
           return;
         }
       }
-      previousNote.value = rows.value[index].note;
+      rows.value[index].previousNote = rows.value[index].note;
       rows.value[index].editingNote = true;
     };
 
@@ -190,7 +190,7 @@ export default {
     };
 
     const confirmCancelNote = (index) => {
-      if (rows.value[index].note == previousNote.value) {
+      if (rows.value[index].note == rows.value[index].previousNote) {
         cancelNote(index);
       }
       else if (confirm("Are you sure you want to discard your changes?")) {
@@ -200,8 +200,8 @@ export default {
 
     const cancelNote = (index) => {
       rows.value[index].editingNote = false;
-      rows.value[index].note = previousNote.value;
-      previousNote.value = '';
+      rows.value[index].note = rows.value[index].previousNote;
+      rows.value[index].previousNote = '';
       saveRows(documentId);
     };
 

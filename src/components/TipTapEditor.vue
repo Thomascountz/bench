@@ -1,5 +1,5 @@
 <template>
-    <div class="tiptap-editor mt-5 border rounded border-black">
+    <div class="tiptap-editor mt-4 border rounded border-black">
         <div class="menu-bar bg-gray-200 py-2 px-4 space-x-4 rounded-t">
             <button @click="editor.chain().focus().toggleHeading({ level: 3 }).run()">
                 <font-awesome-icon :icon="['fas', 'heading']" />
@@ -66,7 +66,7 @@ export default {
             extensions: [StarterKit, Link],
             editorProps: {
                 attributes: {
-                    class: 'prose max-w-full m-5 focus:outline-none',
+                    class: 'prose max-w-full m-4 focus:outline-none',
                 },
             },
             content: this.modelValue,
