@@ -99,6 +99,7 @@ import EmGithubEmbed from '@/components/EmGithubEmbed.vue';
 import TipTapEditor from '@/components/TipTapEditor.vue';
 import draggable from 'vuedraggable';
 import DocumentModel from '@/models/DocumentModel';
+import RowModel from '@/models/RowModel';
 
 export default {
   name: 'DocumentPage',
@@ -109,23 +110,19 @@ export default {
   },
   setup() {
     const rows = ref([]);
-    const rowCounter = ref(0);
     const route = useRoute();
     const documentId = route.params.id;
     const previousLink = ref('');
     const previousNote = ref('');
     const documentName = ref('');
 
-
     const addRow = () => {
-      const id = rowCounter.value++;
-      rows.value.push({
-        id: id,
-        editingLink: true,
-        targetInput: '',
-        note: '',
-        editingNote: true,
-      });
+      const id = Math.max(...rows.value.map((row) => row.id), 0) + 1;
+      const newRow = new RowModel(id, '', '');
+      newRow.editingLink = true;
+      newRow.editingNote = true;
+      newRow.targetInput = '';
+      rows.value.push(newRow);
       saveRows(documentId);
     };
 

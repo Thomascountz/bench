@@ -1,5 +1,6 @@
 <template>
     <div class="container mx-auto my-8 px-4">
+        <h1 class="text-4xl font-bold text-center text-neutral-900">Bench</h1>
       <div class="flex justify-between items-center mb-6 mt-6">
         <h1 class="text-3xl font-semibold text-neutral-900">Documents</h1>
         <button @click="addDocument()"
@@ -19,7 +20,7 @@
               class="bg-slate-300 border border-black hover:bg-slate-400 text-black font-medium py-1 px-2 rounded mr-2">
               Rename
             </button>
-            <button @click="deleteDocument(index)"
+            <button @click="confirmDelete(index)"
               class="bg-slate-300 hover:bg-red-900 text-red-900 hover:text-white border border-red-900 font-medium py-1 px-2 rounded">
               Delete
             </button>
