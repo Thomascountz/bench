@@ -8,12 +8,14 @@
     </div>
     <draggable v-model="rows" handle=".handle" item-key="id" @end="saveRows(documentId)">
       <template #item="{ element, index }">
-        <div class="grid grid-cols-2 gap-6 mb-6 border border-black rounded-lg relative">
+        <div class="grid grid-cols-2 mb-6 border border-black rounded-lg relative">
+          <!--  Handle -->
           <div class="absolute top-2 left-2 cursor-move handle">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M4 6h12V5H4v1zm0 4h12V9H4v1zm0 4h12v-1H4v1z" clip-rule="evenodd" />
             </svg>
           </div>
+          <!--  Delete Row -->
           <button @click="confirmDelete(index)" class="absolute top-2 right-2">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd"
@@ -21,7 +23,8 @@
                 clip-rule="evenodd" />
             </svg>
           </button>
-          <div class="p-4 border-r border-black">
+          <!-- Github Link -->
+          <div class="p-4">
             <div v-if="element.editingLink">
               <input v-model="element.targetInput" class="border border-black mt-5 p-2 w-full rounded"
                 placeholder="Github link" />
@@ -44,33 +47,40 @@
               </button>
             </div>
           </div>
-          <div class="p-4">
+          <!-- Note -->
+          <div class="p-4 bg-zinc-100 m-1 rounded">
             <div v-if="element.editingNote">
               <tip-tap-editor v-model="element.note" />
               <div class="flex justify-end mt-2">
                 <button @click="saveNote(index)"
-                  class="bg-green-800 hover:bg-green-900 text-white font-medium py-1 px-2 rounded mr-2 border border-black mt-2">
+                  class="bg-green-800 hover:bg-green-900 text-white font-medium py-1 px-2 rounded mr-2 mt-2">
                   Save
                 </button>
-                <button @click="cancelNote(index)"
+                <button @click="confirmCancelNote(index)"
                   class="bg-slate-300 hover:bg-red-900 text-red-900 hover:text-white border border-red-900 font-medium py-1 px-2 rounded mt-2">
                   Cancel
                 </button>
               </div>
             </div>
             <div v-else>
-              <div v-html="element.note" class="prose max-w-full mt-4 p-4 rounded border border-black">
+              <div class="rounded border border-black mt-4">
+                <div v-html="element.note" class="prose max-w-full p-4 rounded-t bg-white">
+                </div>
+                <div class="p-1 rounded-b mt-0 py-4 bg-gray-200"></div>
               </div>
               <div class="flex justify-end mt-2">
-                <button @click="editNote(index)"
-                  class="bg-slate-300 border border-black hover:bg-slate-400 text-black font-medium py-1 px-2 rounded mr-2 mt-2">
-                  Edit
-                </button>
+                <div>
+                  <button @click="editNote(index)"
+                    class="bg-slate-300 border border-black hover:bg-slate-400 text-black font-medium py-1 px-2 rounded mr-2 mt-2">
+                    Edit
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </template>
+      <!--  Add Row -->
       <template #footer>
         <button @click="addRow"
           class="bg-slate-300 border border-black hover:bg-slate-400 text-black font-medium py-1 px-2 rounded mr-2">
@@ -102,6 +112,8 @@ export default {
     const rowCounter = ref(0);
     const route = useRoute();
     const documentId = route.params.id;
+    const previousLink = ref('');
+    const previousNote = ref('');
     const documentName = ref('');
 
 
@@ -124,12 +136,16 @@ export default {
     };
 
     const editLink = (index) => {
+      previousLink.value = rows.value[index].target;
       rows.value[index].editingLink = true;
       saveRows(documentId);
     };
 
     const cancelLink = (index) => {
       rows.value[index].editingLink = false;
+      rows.value[index].target = previousLink.value;
+      saveRows(documentId);
+      previousLink.value = '';
     };
 
     const deleteRow = (index) => {
@@ -167,6 +183,7 @@ export default {
           return;
         }
       }
+      previousNote.value = rows.value[index].note;
       rows.value[index].editingNote = true;
     };
 
@@ -175,8 +192,20 @@ export default {
       saveRows(documentId);
     };
 
+    const confirmCancelNote = (index) => {
+      if (rows.value[index].note == previousNote.value) {
+        cancelNote(index);
+      }
+      else if (confirm("Are you sure you want to discard your changes?")) {
+        cancelNote(index);
+      }
+    };
+
     const cancelNote = (index) => {
       rows.value[index].editingNote = false;
+      rows.value[index].note = previousNote.value;
+      previousNote.value = '';
+      saveRows(documentId);
     };
 
     loadDocument();
@@ -192,6 +221,7 @@ export default {
       deleteRow,
       editNote,
       saveNote,
+      confirmCancelNote,
       cancelNote,
       documentName
     };

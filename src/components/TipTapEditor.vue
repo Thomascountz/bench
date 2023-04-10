@@ -1,6 +1,6 @@
 <template>
-    <div class="tiptap-editor mt-5">
-        <div class="menu-bar bg-gray-200 py-2 px-4 space-x-4 rounded-t border border-t-black border-r-black border-l-black">
+    <div class="tiptap-editor mt-5 border rounded border-black">
+        <div class="menu-bar bg-gray-200 py-2 px-4 space-x-4 rounded-t">
             <button @click="editor.chain().focus().toggleHeading({ level: 3 }).run()">
                 <font-awesome-icon :icon="['fas', 'heading']" />
             </button>
@@ -20,7 +20,8 @@
                 <font-awesome-icon :icon="['fas', 'list-ol']" />
             </button>
         </div>
-        <editor-content :editor="editor" class="border border-b-black border-l-black border-r-black p-1 rounded-b bg-white" />
+        <editor-content :editor="editor" class="p-1 bg-white" />
+        <div class="border p-1 rounded-b mt-0 py-4 bg-gray-200"></div>
     </div>
 </template>
   
