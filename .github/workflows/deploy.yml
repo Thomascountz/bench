@@ -1,5 +1,7 @@
 name: Deploy
 on: [push]
+permissions:
+    contents: read|write
 jobs:
   build_vue:
     runs-on: ubuntu-latest
