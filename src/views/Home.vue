@@ -1,6 +1,6 @@
 <template>
     <div class="container mx-auto my-8 px-4">
-        <h1 class="text-4xl font-bold text-center text-neutral-900">Bench</h1>
+        <h1 class="text-4xl font-bold text-center text-neutral-900 font-black">Bench <span class="text-base text-gray-500 font-normal">0.0.1.alpha</span></h1>
       <div class="flex justify-between items-center mb-6 mt-6">
         <h1 class="text-3xl font-semibold text-neutral-900">Documents</h1>
         <button @click="addDocument()"

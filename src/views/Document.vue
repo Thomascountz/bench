@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto my-8 px-4">
     <router-link to="/" class="text-black font-medium mr-2 p-2">
-      ← Home
+      ← Bench
     </router-link>
     <div class="flex justify-between items-center mb-6 mt-6">
       <h1 class="text-3xl font-semibold text-neutral-900">{{ documentName }}</h1>
@@ -66,7 +66,15 @@
               <div class="rounded border border-black mt-4">
                 <div v-html="element.note" class="prose max-w-full p-4 rounded-t bg-white">
                 </div>
-                <div class="p-1 rounded-b mt-0 py-4 bg-gray-200"></div>
+                <div class="flex justify-end p-0 rounded-b mt-0 py-2 bg-gray-200 metadata">
+                  <span class="mr-4 p-0 text-xs font-mono font-bold text-gray-500">
+                    Created: {{ formatDistanceToNow(new Date(element.createdAt), { addSuffix: true }) }}
+                  </span>
+                  <span v-if="element.updatedAt != element.createdAt"
+                    class="mr-4 p-0 text-xs font-mono font-bold text-gray-500 ">
+                    edited
+                  </span>
+                </div>
               </div>
               <div class="flex justify-end mt-2">
                 <div>
@@ -95,6 +103,7 @@
 <script>
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { formatDistanceToNow } from 'date-fns';
 import EmGithubEmbed from '@/components/EmGithubEmbed.vue';
 import TipTapEditor from '@/components/TipTapEditor.vue';
 import draggable from 'vuedraggable';
@@ -185,8 +194,17 @@ export default {
     };
 
     const saveNote = (index) => {
+      const now = new Date()
       rows.value[index].editingNote = false;
-      saveRows(documentId);
+      if (rows.value[index].note == rows.value[index].previousNote) {
+        cancelNote(index);
+      } else {
+        rows.value[index].updatedAt = now;
+        if (rows.value[index].createdAt == null) {
+          rows.value[index].createdAt = now;
+        }
+        saveRows(documentId);
+      }
     };
 
     const confirmCancelNote = (index) => {
@@ -208,6 +226,7 @@ export default {
     loadDocument();
 
     return {
+      formatDistanceToNow,
       rows,
       addRow,
       saveRows,

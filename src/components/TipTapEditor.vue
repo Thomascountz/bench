@@ -20,8 +20,7 @@
                 <font-awesome-icon :icon="['fas', 'list-ol']" />
             </button>
         </div>
-        <editor-content :editor="editor" class="p-1 bg-white" />
-        <div class="border p-1 rounded-b mt-0 py-4 bg-gray-200"></div>
+        <editor-content :editor="editor" class="p-1 bg-white rounded" />
     </div>
 </template>
   
@@ -29,6 +28,11 @@
 import StarterKit from '@tiptap/starter-kit';
 import { Editor, EditorContent } from '@tiptap/vue-3';
 import Link from '@tiptap/extension-link';
+import CodeBlockLowLight from '@tiptap/extension-code-block-lowlight';
+
+import { lowlight } from "lowlight"
+import ruby from 'highlight.js/lib/languages/ruby'
+lowlight.registerLanguage('ruby', ruby)
 
 export default {
     name: 'TipTapEditor',
@@ -63,7 +67,12 @@ export default {
 
     mounted() {
         this.editor = new Editor({
-            extensions: [StarterKit, Link],
+            extensions: [
+                StarterKit,
+                Link,
+                CodeBlockLowLight.configure({
+                    lowlight,
+                })],
             editorProps: {
                 attributes: {
                     class: 'prose max-w-full m-4 focus:outline-none',

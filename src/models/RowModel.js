@@ -4,6 +4,8 @@ class RowModel {
         this.target = target || '';
         this.note = note || '';
         this.rawCode = rawCode || '';
+        this.createdAt = null;
+        this.updatedAt = null;
     }
 }
 
