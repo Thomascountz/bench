@@ -28,11 +28,7 @@
 import StarterKit from '@tiptap/starter-kit';
 import { Editor, EditorContent } from '@tiptap/vue-3';
 import Link from '@tiptap/extension-link';
-import CodeBlockLowLight from '@tiptap/extension-code-block-lowlight';
-
-import { lowlight } from "lowlight"
-import ruby from 'highlight.js/lib/languages/ruby'
-lowlight.registerLanguage('ruby', ruby)
+import CodeBlock from '@tiptap/extension-code-block';
 
 export default {
     name: 'TipTapEditor',
@@ -70,9 +66,8 @@ export default {
             extensions: [
                 StarterKit,
                 Link,
-                CodeBlockLowLight.configure({
-                    lowlight,
-                })],
+                CodeBlock,
+        ],
             editorProps: {
                 attributes: {
                     class: 'prose max-w-full m-4 focus:outline-none',
