@@ -64,14 +64,17 @@
             </div>
             <div v-else>
               <div class="rounded border border-black mt-4">
-                <div v-html="element.note" class="prose max-w-full p-4 rounded-t bg-white">
+                <div v-if=element.note v-html="element.note" class="prose max-w-full p-4 rounded-t bg-white">
                 </div>
-                <div class="flex justify-end p-0 rounded-b mt-0 py-2 bg-gray-200 metadata">
-                  <span class="mr-4 p-0 text-xs font-mono font-bold text-gray-500">
-                    Created: {{ formatDistanceToNow(new Date(element.createdAt), { addSuffix: true }) }}
+                <div v-else class="prose max-w-full p-4 rounded-t bg-white">
+                  <p class="text-gray-400 text-sm">&lt;&lt;Empty&gt;&gt;</p>
+                </div>
+                <div class="flex justify-between p-0 rounded-b mt-0 py-2 bg-gray-200 metadata">
+                  <span v-if=element.createdAt class="ml-4 p-0 text-xs text-gray-800">
+                    {{ format(new Date(element.createdAt), 'PPPppp') }}
                   </span>
                   <span v-if="element.updatedAt != element.createdAt"
-                    class="mr-4 p-0 text-xs font-mono font-bold text-gray-500 ">
+                    class="mr-4 p-0 text-xs text-gray-500 ">
                     edited
                   </span>
                 </div>
@@ -103,7 +106,7 @@
 <script>
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { formatDistanceToNow } from 'date-fns';
+import { format } from 'date-fns';
 import EmGithubEmbed from '@/components/EmGithubEmbed.vue';
 import TipTapEditor from '@/components/TipTapEditor.vue';
 import draggable from 'vuedraggable';
@@ -126,9 +129,9 @@ export default {
     const addRow = () => {
       const id = Math.max(...rows.value.map((row) => row.id), 0) + 1;
       const newRow = new RowModel(id, '', '');
-      newRow.editingLink = true;
+      newRow.editingLink = false;
       newRow.previousLink = '';
-      newRow.editingNote = true;
+      newRow.editingNote = false;
       newRow.previousNote = '';
       newRow.targetInput = '';
       rows.value.push(newRow);
@@ -183,7 +186,7 @@ export default {
 
     const editNote = (index) => {
       if (rows.value.some(row => row.editingNote)) {
-        if (confirm("You have unsaved changes in another note. Do you want to discard those changes and edit this note?")) {
+        if (confirm("You can only edit one note at a time. You have unsaved changes in another note. Do you want to discard those changes and edit this note?")) {
           rows.value.forEach(row => row.editingNote = false);
         } else {
           return;
@@ -226,7 +229,7 @@ export default {
     loadDocument();
 
     return {
-      formatDistanceToNow,
+      format,
       rows,
       addRow,
       saveRows,
