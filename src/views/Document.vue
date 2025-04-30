@@ -1,6 +1,6 @@
 <template>
-  <div class="container mx-auto my-8 px-4">
-    <router-link to="/" class="text-black font-medium mr-2 p-2">
+  <div class="container mx-auto my-8 px-4 print:max-w-[210mm] print:mx-auto print:p-4 print:my-0">
+    <router-link to="/" class="text-black font-medium mr-2 p-2 print:hidden">
       ← Bench
     </router-link>
     <div class="flex justify-between items-center mb-6 mt-6">
@@ -8,15 +8,15 @@
     </div>
     <draggable v-model="rows" handle=".handle" item-key="id" @end="saveRows(documentId)">
       <template #item="{ element, index }">
-        <div class="grid grid-cols-2 mb-6 border border-black rounded-lg relative">
+        <div class="grid grid-cols-2 mb-6 border border-black rounded-lg relative print:break-inside-avoid">
           <!--  Handle -->
-          <div class="absolute top-2 left-2 cursor-move handle">
+          <div class="absolute top-2 left-2 cursor-move handle print:hidden">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd" d="M4 6h12V5H4v1zm0 4h12V9H4v1zm0 4h12v-1H4v1z" clip-rule="evenodd" />
             </svg>
           </div>
           <!--  Delete Row -->
-          <button @click="confirmDelete(index)" class="absolute top-2 right-2">
+          <button @click="confirmDelete(index)" class="absolute top-2 right-2 print:hidden">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
               <path fill-rule="evenodd"
                 d="M14.707 14.707a1 1 0 0 1-1.414 0L10 11.414l-3.293 3.293a1 1 0 0 1-1.414-1.414L8.586 10 5.293 6.707a1 1 0 0 1 1.414-1.414L10 8.586l3.293-3.293a1 1 0 0 1 1.414 1.414L11.414 10l3.293 3.293a1 1 0 0 1 0 1.414z"
@@ -29,11 +29,11 @@
               <input v-model="element.targetInput" class="border border-black mt-5 p-2 w-full rounded"
                 placeholder="Github link" />
               <button @click="submitLink(index)"
-                class="bg-green-800 hover:bg-green-900 text-white font-medium py-1 px-2 rounded mt-2 border border-black mr-2">
+                class="bg-green-800 hover:bg-green-900 text-white font-medium py-1 px-2 rounded mt-2 border border-black mr-2 print:hidden">
                 Save
               </button>
               <button @click="cancelLink(index)"
-                class="bg-slate-300 hover:bg-red-900 text-red-900 hover:text-white border border-red-900 font-medium py-1 px-2 rounded mt-2">
+                class="bg-slate-300 hover:bg-red-900 text-red-900 hover:text-white border border-red-900 font-medium py-1 px-2 rounded mt-2 print:hidden">
                 Cancel
               </button>
             </div>
@@ -42,7 +42,7 @@
               <input v-else readonly class="border border-black mt-5 p-2 w-full rounded cursor-not-allowed"
                 placeholder="No Github link" />
               <button @click="editLink(index)"
-                class="bg-slate-300 border border-black hover:bg-slate-400 text-black font-medium py-1 px-2 rounded mr-2 mt-2">
+                class="bg-slate-300 border border-black hover:bg-slate-400 text-black font-medium py-1 px-2 rounded mr-2 mt-2 print:hidden">
                 Edit
               </button>
             </div>
@@ -53,23 +53,23 @@
               <tip-tap-editor v-model="element.note" />
               <div class="flex justify-end mt-2">
                 <button @click="saveNote(index)"
-                  class="bg-green-800 hover:bg-green-900 text-white font-medium py-1 px-2 rounded mr-2 mt-2">
+                  class="bg-green-800 hover:bg-green-900 text-white font-medium py-1 px-2 rounded mr-2 mt-2 print:hidden">
                   Save
                 </button>
                 <button @click="confirmCancelNote(index)"
-                  class="bg-slate-300 hover:bg-red-900 text-red-900 hover:text-white border border-red-900 font-medium py-1 px-2 rounded mt-2">
+                  class="bg-slate-300 hover:bg-red-900 text-red-900 hover:text-white border border-red-900 font-medium py-1 px-2 rounded mt-2 print:hidden">
                   Cancel
                 </button>
               </div>
             </div>
             <div v-else>
               <div class="rounded border border-black mt-4">
-                <div v-if=element.note v-html="element.note" class="prose max-w-full p-4 rounded-t bg-white">
+                <div v-if=element.note v-html="element.note" class="prose max-w-full p-4 rounded-t bg-white print:whitespace-pre-wrap print:break-words">
                 </div>
                 <div v-else class="prose max-w-full p-4 rounded-t bg-white">
                   <p class="text-gray-400 text-sm">&lt;&lt;Empty&gt;&gt;</p>
                 </div>
-                <div class="flex justify-between p-0 rounded-b mt-0 py-2 bg-gray-200 metadata">
+                <div class="flex justify-between p-0 rounded-b mt-0 py-2 bg-gray-200 metadata print:text-xs">
                   <span v-if=element.createdAt class="ml-4 p-0 text-xs text-gray-800">
                     {{ format(new Date(element.createdAt), 'PPPppp') }}
                   </span>
@@ -82,7 +82,7 @@
               <div class="flex justify-end mt-2">
                 <div>
                   <button @click="editNote(index)"
-                    class="bg-slate-300 border border-black hover:bg-slate-400 text-black font-medium py-1 px-2 rounded mr-2 mt-2">
+                    class="bg-slate-300 border border-black hover:bg-slate-400 text-black font-medium py-1 px-2 rounded mr-2 mt-2 print:hidden">
                     Edit
                   </button>
                 </div>
@@ -94,7 +94,7 @@
       <!--  Add Row -->
       <template #footer>
         <button @click="addRow"
-          class="bg-slate-300 border border-black hover:bg-slate-400 text-black font-medium py-1 px-2 rounded mr-2">
+          class="bg-slate-300 border border-black hover:bg-slate-400 text-black font-medium py-1 px-2 rounded mr-2 print:hidden">
           + Add row
         </button>
       </template>
